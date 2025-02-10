@@ -1,0 +1,36 @@
+<!-- templates/no_jaguar.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <img src="{{ url_for('static', filename='images/logo.svg') }}" alt="Bioscanner Logo" class="logo">
+    
+    <div class="result-box not-detected">
+        <div class="result-image">
+            <img src="{{ url_for('static', filename='images/landscape.jpg') }}" alt="Landscape" class="detection-image">
+        </div>
+        <div class="result-message">
+            <div class="not-detected-btn">
+                <!--svg class="result-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M2 6C2 3.79086 3.79086 2 6 2H6.5V6.5H2V6Z" fill="currentColor"/>
+                    <path d="M17.5 2H18C20.2091 2 22 3.79086 22 6V6.5H17.5V2Z" fill="currentColor"/>
+                    <path d="M2 17.5V18C2 20.2091 3.79086 22 6 22H6.5V17.5H2Z" fill="currentColor"/>
+                    <path d="M17.5 17.5V22H18C20.2091 22 22 20.2091 22 18V17.5H17.5Z" fill="currentColor"/>
+                    <circle cx="8.5" cy="10.5" r="1.5" fill="currentColor"/>
+                    <circle cx="15.5" cy="10.5" r="1.5" fill="currentColor"/>
+                    <path d="M8 15C8 15 10 17 12 17C14 17 16 15 16 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg-->
+                <img src="{{ url_for('static', filename='images/detection-icon.png') }}" alt="Check" class="result-icon">
+                <span>No jaguar was found</span>
+            </div>
+        </div>
+        <a href="{{ url_for('upload') }}" class="btn-restart">↶ Restart</a>
+    </div>
+</div>
+
+<div class="forest-bg"></div>
+
+<footer class="footer">
+    © 2025 C Minds. Todos los derechos reservados.
+</footer>
+{% endblock %}

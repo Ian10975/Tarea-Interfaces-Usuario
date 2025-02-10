@@ -1,0 +1,17 @@
+<!-- templates/index.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <img src="{{ url_for('static', filename='images/logo.svg') }}" alt="Bioscanner Logo" class="logo">
+    <h1 class="title">Artificial Intelligence<br>to Protect the Jaguar</h1>
+    <p class="subtitle">This project is all about using AI for good – monitoring,<br>understanding, and safeguarding biodiversity like never before.</p>
+    <a href="{{ url_for('upload') }}" class="btn-demo">Start Demo</a>
+</div>
+
+<div class="forest-bg"></div>
+
+<footer class="footer">
+    © 2025 C Minds. Todos los derechos reservados.
+</footer>
+{% endblock %}
