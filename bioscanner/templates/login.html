@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-content">
+            <img src="{{ url_for('static', filename='images/Vector.png') }}" alt="BioScanner Logo" class="loading-logo">
+        </div>
+    </div>
+
+    <div class="login-container">
+        <div class="login-left">
+            <a href="/" class="logo-link">
+                <img src="{{ url_for('static', filename='images/Logo Vertical BioScanner 1 (1).png') }}" alt="BioScanner" class="login-logo">
+            </a>
+            
+            <div class="login-content">
+                <h1 class="login-title">Your lens, our AI,<br>their legacy.</h1>
+                
+                <form class="login-form" id="loginForm">
+                    <div class="form-group">
+                        <input type="email" placeholder="Email" required>
+                    </div>
+                    <div class="form-group password-group">
+                        <input type="password" placeholder="Contraseña" required>
+                        <button type="button" class="toggle-password">
+                        
+                        </button>
+                    </div>
+                    <button type="submit" class="login-button">
+                        <span>Log In</span> <span class="arrow">→</span>
+                    </button>
+                </form>
+                
+                <p class="forgot-password">
+                    <a href="/reset-password">Forgot Password?</a>
+                </p>
+                
+                <div class="google-login">
+                    <button type="button" class="google-button">
+                        <img src="{{ url_for('static', filename='images/Google Logo.png') }}" alt="Google" class="google-icon">
+                        Sign In with Google
+                    </button>
+                </div>
+                
+                <p class="request-account">
+                    Don't have an account? <a href="/request-access">Request Access</a>
+                </p>
+            </div>
+        </div>
+        
+        <div class="login-right">
+            <img src="{{ url_for('static', filename='images/Recurso 6 1.png') }}" alt="Jaguar Pattern" class="jaguar-pattern">
+        </div>
+    </div>
+    
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-content">
+            <img src="{{ url_for('static', filename='images/Vector.png') }}" alt="BioScanner Logo" class="loading-logo">
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginForm = document.getElementById('loginForm');
+            const loadingScreen = document.getElementById('loadingScreen');
+
+    
+            
+            // Función para mostrar la pantalla de carga
+            function showLoading() {
+                loadingScreen.style.display = 'flex';
+            }
+            
+            // Manejar el envío del formulario
+            loginForm.addEventListener('submit', function(event) {
+                event.preventDefault(); // Prevenir el envío normal del formulario
+                
+                // Mostrar pantalla de carga
+                showLoading();
+                
+                // Simular un tiempo de carga (puedes reemplazar esto con una llamada real al servidor)
+                setTimeout(function() {
+                    // Redireccionar a scan.html después de 2 segundos
+                    window.location.href = '/scan';
+                }, 2000);
+            });
+            
+            // Implementar toggle para ver/ocultar contraseña
+            const toggleBtn = document.querySelector('.toggle-password');
+            const passwordInput = document.querySelector('input[type="password"]');
+            
+            toggleBtn.addEventListener('click', function() {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+            });
+        });
+    </script>
+</body>
+</html>

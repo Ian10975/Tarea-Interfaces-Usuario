@@ -1,17 +1,122 @@
 <!-- templates/index.html -->
 {% extends "base.html" %}
 
+{% block title %}Bioscanner - The Jaguar AI{% endblock %}
+
 {% block content %}
-<div class="container">
-    <img src="{{ url_for('static', filename='images/logo.svg') }}" alt="Bioscanner Logo" class="logo">
-    <h1 class="title">Artificial Intelligence<br>to Protect the Jaguar</h1>
-    <p class="subtitle">This project is all about using AI for good – monitoring,<br>understanding, and safeguarding biodiversity like never before.</p>
-    <a href="{{ url_for('upload') }}" class="btn-demo">Start Demo</a>
-</div>
 
-<div class="forest-bg"></div>
+<!-- Primera sección -->
+<section class="hero">
+    <div class="hero-container">
+        <div class="hero-content">
+        </div>
+    </div>
+    <div class="jaguar-section">
+        <img src="{{ url_for('static', filename='images/JAGUAR 1.png') }}" alt="Jaguar" class="jaguar-hero-image">
+    </div>
+</section>
+<!-- Segunda sección -->
+<section class="info-section">
+    <div class="info-container">
+        <p class="info-text">This project is all about using AI for good - monitoring, understanding, and safeguarding biodiversity like never before.</p>
+        <a href="/dashboard" class="dashboard-btn">Go to Dashboard</a>
+<!-- Tercera sección -->
+        <div class="partners-section">
+            <div class="divider-line"></div>
+            <div class="partners-wrapper">
+                <img src="{{ url_for('static', filename='images/Frame 17.png') }}" alt="Partner Logos" class="partners-image">
+            </div>
+            <div class="divider-line"></div>
+        </div>
+    </div>
+</section>
+<!-- Cuarta sección -->
+<section class="protect-section">
+    <div class="protect-container">
+        <h2 class="protect-title">Artificial Intelligence<br>to Protect the Jaguar</h2>
+        <p class="protect-text">Tech4Nature Mexico works to accelerate the effective conservation 
+            and regeneration of biodiversity and ecosystem health, strengthening monitoring, 
+            conservation, and understanding of the impacts of climate change on ecosystems 
+            and priority species in the mangrove area of the Yucátan Peninsula.</p>
+<!-- Quinta sección -->
+        <div class="vertical-bars">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+    </div>
+</section>
+<!-- Sexta sección -->
+<section class="tech4nature-section">
+    <div class="tech4nature-container">
+        <p class="tech4nature-text">
+            Tech4Nature Mexico works to accelerate the effective conservation and regeneration of biodiversity and ecosystem health, strengthening monitoring, conservation, and understanding of the impacts of climate change on ecosystems and priority species in the mangrove area of the Yucatán Peninsula.
+        </p>
+    </div>
+</section>
+<!-- Septima sección -->
+<footer class="footer-section">
+    <div class="footer-container">
+        <div class="footer-left">
+            <div class="contact-link">
+                CONTACT US <span class="arrow">→</span>
+            </div>
+            
+            <div class="footer-nav">
+                <div class="nav-column">
+                    <h3>HOME</h3>
+                    <h3>ABOUT</h3>
+                    <h3>COMMUNITY</h3>
+                    <ul>
+                        <li>Creators</li>
+                        <li>Events</li>
+                        <li>Opportunities</li>
+                    </ul>
+                </div>
+                
+                <div class="nav-column">
+                    <h3>KNOWLEDGE</h3>
+                    <ul>
+                        <li>Explore</li>
+                        <li>Reduce Del Saber</li>
+                    </ul>
+                    <h3>DISCOVERY</h3>
+                    <ul>
+                        <li>Featured First</li>
+                        <li>Prize 2024</li>
+                        <li>Learning Territories</li>
+                        <li>Bioconnectors</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
 
-<footer class="footer">
-    © 2025 C Minds. Todos los derechos reservados.
+        <div class="footer-right">
+            <div class="newsletter-container">
+                <div class="newsletter-content">
+                    <h3>Subscribe Our Newsletter</h3>
+                    <div class="newsletter-form">
+                        <label>Email</label>
+                        <div class="input-wrapper">
+                            <input type="email">
+                            <button type="submit">→</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="social-links">
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer-bottom">
+        <div class="copyright-line"></div>
+        <div class="copyright-content">
+            <p class="copyright-text">© Naturalab LAC. All Rights Reserved. 2024</p>
+            <img src="{{ url_for('static', filename='images/Group 4.png') }}" alt="Social Media Icons">
+        </div>
+    </div>
 </footer>
 {% endblock %}

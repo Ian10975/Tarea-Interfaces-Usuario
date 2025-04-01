@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scan - BioScanner</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body class="scan-page">
+    <div class="scan-container">
+        <header class="scan-header">
+            <div class="logo-container">
+                <a href="/">
+                    <img src="{{ url_for('static', filename='images/Logo Vertical BioScanner Scan.png') }}" alt="BioScanner" class="scan-logo">
+                </a>
+            </div>
+            <div class="user-profile">
+                <img src="{{ url_for('static', filename='images/profile-pic.png') }}" alt="User Profile" class="profile-pic">
+                <span class="dropdown-arrow">▼</span>
+            </div>
+        </header>
+
+        <div class="scan-divider"></div>
+
+        <main class="scan-content">
+            <div class="scan-title-container">
+                <h1 class="scan-title">Let's deep dive!</h1>
+                <p class="scan-description">First, upload all your photos at once. This may take several minutes depending on the size.</p>
+            </div>
+
+            <div class="progress-indicator">
+                <span class="progress-dot active"></span>
+                <span class="progress-dot"></span>
+                <span class="progress-dot"></span>
+            </div>
+
+            <div class="help-button">
+                <button type="button" class="btn-help">
+                    <span class="help-icon">?</span> Help
+                </button>
+            </div>
+
+            <div class="corner-upload">
+                <img src="{{ url_for('static', filename='images/upload.png') }}" alt="Upload" class="corner-upload-icon">
+            </div>
+
+            <div class="upload-container">
+                <div class="upload-area">
+                    <div class="upload-content">
+                        <div class="upload-icon">
+                            <img src="{{ url_for('static', filename='images/Upload Scan.png') }}" alt="Upload" width="40">
+                        </div>
+                        <p class="upload-text">Drag and Drop here</p>
+                        <p class="upload-or">or</p>
+                        
+                        <!-- Input file oculto que se activará al hacer clic en el botón -->
+                        <input type="file" id="fileInput" accept=".jpg,.jpeg,.png" style="display:none;" multiple>
+                        
+                        <!-- Botón visible que activará el input file -->
+                        <button type="button" class="btn-select-file" id="selectFileBtn">Select file</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="scan-footer">
+            <div class="nav-tabs">
+                <button class="tab-button active">
+                    <img src="{{ url_for('static', filename='images/scan.png') }}" alt="Scan" class="tab-icon">
+                    Scan
+                </button>
+                <button class="tab-button">
+                    <img src="{{ url_for('static', filename='images/grid-even.png') }}" alt="Gallery" class="tab-icon">
+                    Gallery
+                </button>
+                <button class="tab-button">
+                    <img src="{{ url_for('static', filename='images/Colum_up.png') }}" alt="Analytics" class="tab-icon">
+                    Analytics
+                </button>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const uploadArea = document.querySelector('.upload-area');
+            const fileInput = document.getElementById('fileInput');
+            const selectFileBtn = document.getElementById('selectFileBtn');
+            
+            // Activar el input file al hacer clic en el botón
+            selectFileBtn.addEventListener('click', function() {
+                fileInput.click();
+            });
+            
+            // Cambiar el color del área cuando se selecciona un archivo
+            fileInput.addEventListener('change', function() {
+                if (this.files.length > 0) {
+                    // Archivos seleccionados, cambiar color del área
+                    uploadArea.style.backgroundColor = '#C7E66C';
+                    uploadArea.style.borderColor = '#C7E66C';
+                    
+
+                    // Abre la pantalla de carga de archivos jpg,png
+                    setTimeout(function() {
+                        window.location.href = '/upload';  // Mantén esta URL
+                    }, 1000);
+                }
+            });
+            
+           
+            
+            // Implementación de drag and drop
+            uploadArea.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                // Cambiar color durante el arrastre
+                uploadArea.style.backgroundColor = 'rgba(199, 230, 108, 0.3)'; // Verde más claro durante arrastre
+            });
+            
+            uploadArea.addEventListener('dragleave', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                // Volver al color original
+                uploadArea.style.backgroundColor = 'rgba(159, 232, 112, 0.05)';
+                uploadArea.style.borderColor = '#9FE870';
+            });
+            
+            uploadArea.addEventListener('drop', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                // Obtener archivos arrastrados
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                
+                // Verificar si hay archivos y son imágenes
+                if (files.length > 0) {
+                    const validFiles = Array.from(files).filter(file => 
+                        file.type === 'image/jpeg' || 
+                        file.type === 'image/jpg' || 
+                        file.type === 'image/png'
+                    );
+                    
+                    if (validFiles.length > 0) {
+                        // Cambiar a verde intenso cuando los archivos son subidos
+                        uploadArea.style.backgroundColor = '#C7E66C';
+                        uploadArea.style.borderColor = '#C7E66C';
+                        
+                        // Simular procesamiento de subida
+                        console.log('Imágenes subidas con éxito');
+                    } else {
+                        alert('Por favor, selecciona solo imágenes JPG o PNG.');
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

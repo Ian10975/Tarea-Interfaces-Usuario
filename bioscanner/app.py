@@ -117,6 +117,8 @@ def detect_jaguar(image_path, request):
 def home():
     return render_template('index.html')
 
+
+
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
     if request.method == 'POST':
@@ -144,17 +146,25 @@ def upload():
                 return redirect(url_for('jaguar_detected', result=result_image))
             else:
                 return redirect(url_for('no_jaguar_found'))
-            
-    return render_template('upload.html')
-
+        return render_template('upload.html')
+  # Esta ruta es del demo
 @app.route('/jaguar-detected')
 def jaguar_detected():
     result = session['result'] 
     return render_template('jaguar_detected.html', result=result)
-
+# Esta ruta es del demo
 @app.route('/no-jaguar')
 def no_jaguar_found():
     return render_template('no_jaguar.html')
+# Estas ruta se implentó en el nuevo diseño
+@app.route('/login')
+def login():
+    return render_template('login.html')
+
+@app.route('/scan')
+def scan():
+    return render_template('scan.html')
+
 
 if __name__ == '__main__':
     # Create necessary folders if they don't exist
@@ -162,4 +172,4 @@ if __name__ == '__main__':
     os.makedirs(DETECTION_RESULTS, exist_ok=True)
     app.secret_key = 'super secret key'
     app.config['SESSION_TYPE'] = 'filesystem'
-    app.run(debug=True, port=5000, host='0.0.0.0')
+    app.run(debug=True, host='0.0.0.0', port=5000)

@@ -91,3 +91,9 @@ For open source projects, say how it is licensed.
 
 ## Project status
 If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+
+
+
+
+## Trabajo Diseño realizado por Ian 
+Se modificó  base.html, index.html y se creó login.html , scan.html y quedó pendente el proceso de upload.html(hecho por Francisco)... No se modificó jaguar_detected.html y no_jaguar.html en dado caso que pueda servir para su modificación. Los estilos de cada html se encuentran en style.css, además de que se agregó imagenes para el nuevo diseño del proyecto. Y por último en app.py están señaladas las que implementé @app.route 

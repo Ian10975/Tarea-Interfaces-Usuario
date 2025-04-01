@@ -5,11 +5,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Bioscanner - AI for Biodiversity{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     {% assets "css_all" %}
         <link rel="stylesheet" href="{{ ASSET_URL }}">
     {% endassets %}
 </head>
 <body>
+    <!-- Header con navegación -->
+    <header class="header">
+        <div class="header-container">
+            <a href="/" class="logo-link">
+                <img src="{{ url_for('static', filename='images/Logo Vertical Bioscanner 1.png') }}" alt="BioScanner" class="nav-logo">
+            </a>
+            <nav class="nav-links">
+                <a href="/">HOME</a>
+                <a href="/about">ABOUT</a>
+                <a href="/demo">DEMO</a>
+                <a href="https://github.com/yourusername/bioscanner" target="_blank">GITHUB</a>
+                <a href="/login" class="sign-in-btn">SIGN IN</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Contenido principal -->
     {% block content %}{% endblock %}
 </body>
 </html>
