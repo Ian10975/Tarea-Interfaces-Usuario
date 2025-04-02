@@ -1,0 +1,115 @@
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+    z-index: 9999;
+}
+
+.upload-status {
+    padding: 20px;
+    text-align: left;
+}
+
+.upload-status h1 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.upload-description {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 15px;
+    line-height: 1.5;
+}
+
+.progress-indicators {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    background-color: #ddd;
+    border-radius: 50%;
+}
+
+.dot.active {
+    background-color: #9FE870;
+}
+
+.help-link {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: #666;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.help-link img {
+    opacity: 0.7;
+}
+
+.upload-progress-container {
+    border: 1px dashed #ccc;
+    border-radius: 10px;
+    padding: 40px;
+    margin: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.circular-progress {
+    text-align: center;
+}
+
+.progress-circle {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: conic-gradient(#9FE870 50%, #f3f3f3 0);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+}
+
+.progress-circle::before {
+    content: '';
+    position: absolute;
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    background-color: white;
+}
+
+.progress-value {
+    position: relative;
+    font-size: 24px;
+    font-weight: bold;
+    color: #004D40;
+}
+
+.progress-text {
+    font-size: 16px;
+    color: #333;
+    margin: 10px 0;
+}
+
+.progress-details {
+    font-size: 14px;
+    color: #666;
+}
+
+/* Clase para mostrar el overlay */
+.loading-overlay.show {
+    display: flex !important;
+} 

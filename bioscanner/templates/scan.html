@@ -18,7 +18,7 @@
                 </a>
             </div>
             <div class="user-profile">
-                <img src="{{ url_for('static', filename='images/profile-pic.png') }}" alt="User Profile" class="profile-pic">
+                
                 <span class="dropdown-arrow">▼</span>
             </div>
         </header>
@@ -101,12 +101,17 @@
                     // Archivos seleccionados, cambiar color del área
                     uploadArea.style.backgroundColor = '#C7E66C';
                     uploadArea.style.borderColor = '#C7E66C';
-                    
 
-                    // Abre la pantalla de carga de archivos jpg,png
-                    setTimeout(function() {
-                        window.location.href = '/upload';  // Mantén esta URL
-                    }, 1000);
+                    // Guardar el archivo en sessionStorage
+                    const file = this.files[0];
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        sessionStorage.setItem('fileToUpload', e.target.result);
+                        sessionStorage.setItem('fileName', file.name);
+                        // Redirigir a la página de carga
+                        window.location.href = '/upload';
+                    };
+                    reader.readAsDataURL(file);
                 }
             });
             

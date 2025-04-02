@@ -1,9 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uploading - BioScanner</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/loading.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body class="scan-page">
+    <div class="scan-container">
+        <header class="scan-header">
+            <div class="logo-container">
+                <a href="/">
+                    <img src="{{ url_for('static', filename='images/Logo Vertical BioScanner Scan.png') }}" alt="BioScanner" class="scan-logo">
+                </a>
+            </div>
+            <div class="user-profile">
+                
+                <span class="dropdown-arrow">▼</span>
+            </div>
+        </header>
 
-{% extends "Scan.html" %}
+        <div class="scan-divider"></div>
 
-{% block title %}Uploading - BioScanner{% endblock %}
+        <main class="scan-content">
+            <div class="upload-status">
+                <h1>Uploading</h1>
+                <p class="upload-description">Your files are being uploading, it may take several minutes depending on the file sizes and your internet speed.</p>
+                
+                <div class="progress-indicators">
+                    <span class="dot active"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                </div>
 
-{% block scan_content %}
+                <div class="help-button">
+                    <button type="button" class="btn-help">
+                        <span class="help-icon">?</span> Help
+                    </button>
+                </div>
+    
 
-</script>
-{% endblock %}
+            <div class="upload-progress-container">
+                <div class="circular-progress">
+                    <div class="progress-circle">
+                        <div class="progress-value">0%</div>
+                    </div>
+                    <p class="progress-text">Uploading file...</p>
+                    <p class="progress-details">1 file - Processing image</p>
+                </div>
+            </div>
+        </main>
+
+        <footer class="scan-footer">
+            <div class="nav-tabs">
+                <button class="tab-button active">
+                    <img src="{{ url_for('static', filename='images/scan.png') }}" alt="Scan" class="tab-icon">
+                    Scan
+                </button>
+                <button class="tab-button">
+                    <img src="{{ url_for('static', filename='images/grid-even.png') }}" alt="Gallery" class="tab-icon">
+                    Gallery
+                </button>
+                <button class="tab-button">
+                    <img src="{{ url_for('static', filename='images/Colum_up.png') }}" alt="Analytics" class="tab-icon">
+                    Analytics
+                </button>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const progressCircle = document.querySelector('.progress-circle');
+        const progressValue = document.querySelector('.progress-value');
+        const progressText = document.querySelector('.progress-text');
+        const progressDetails = document.querySelector('.progress-details');
+        let progress = 0;
+
+        function updateProgress() {
+            if (progress < 100) {
+                progress++;
+                progressCircle.style.background = `conic-gradient(#9FE870 ${progress}%, #f3f3f3 0)`;
+                progressValue.textContent = `${progress}%`;
+
+                if (progress < 30) {
+                    progressText.textContent = 'Uploading file...';
+                    progressDetails.textContent = '1 file - Uploading';
+                } else if (progress < 60) {
+                    progressText.textContent = 'Processing image...';
+                    progressDetails.textContent = '1 file - Processing';
+                } else {
+                    progressText.textContent = 'Analyzing results...';
+                    progressDetails.textContent = '1 file - Finalizing';
+                }
+
+                setTimeout(updateProgress, 50);
+            } else {
+                // Subir el archivo cuando la animación termine
+                const fileData = sessionStorage.getItem('fileToUpload');
+                const fileName = sessionStorage.getItem('fileName');
+                
+                if (fileData && fileName) {
+                    // Convertir el base64 a blob
+                    const byteString = atob(fileData.split(',')[1]);
+                    const ab = new ArrayBuffer(byteString.length);
+                    const ia = new Uint8Array(ab);
+                    for (let i = 0; i < byteString.length; i++) {
+                        ia[i] = byteString.charCodeAt(i);
+                    }
+                    const blob = new Blob([ab], { type: 'image/jpeg' });
+                    
+                    // Crear el formulario y enviar el archivo
+                    const form = new FormData();
+                    form.append('file', blob, fileName);
+                    
+                    fetch('/upload', {
+                        method: 'POST',
+                        body: form
+                    })
+                    .then(response => {
+                        if (response.redirected) {
+                            window.location.href = response.url;
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Error al subir el archivo. Por favor, intenta de nuevo.');
+                    });
+                }
+            }
+        }
+
+        // Iniciar la animación
+        updateProgress();
+    });
+    </script>
+</body>
+</html>
+
+
+
+
+

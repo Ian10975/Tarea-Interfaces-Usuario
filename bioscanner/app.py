@@ -5,23 +5,31 @@ import utils as tech
 import base64
 import os
 import random
+from datetime import datetime
 
 app = Flask(__name__)
+app.secret_key = 'super secret key'
+app.config['SESSION_TYPE'] = 'filesystem'
 assets = Environment(app)
 
 # Configurar assets (CSS y JS)
 css = Bundle(
     'css/style.css',
+    'css/loading.css',
     output='gen/packed.css'
 )
 assets.register('css_all', css)
 
 # Configure upload folder
-UPLOAD_FOLDER = 'uploads'
-DETECTION_RESULTS = 'static/detection_results'
+UPLOAD_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'uploads')
+DETECTION_RESULTS = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static/detection_results')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
 ALLOWED_EXTENSIONS = {'jpg', 'jpeg', 'png'}
+
+# Crear las carpetas necesarias al inicio
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+os.makedirs(DETECTION_RESULTS, exist_ok=True)
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -122,32 +130,72 @@ def home():
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
     if request.method == 'POST':
-        if 'file' not in request.files:
-            return 'No file part'
-        
-        file = request.files['file']
-        if file.filename == '':
-            return 'No selected file'
-        
-        if file and allowed_file(file.filename):
-            # Save the uploaded file
-            filename = secure_filename(file.filename)
-            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            file.save(filepath)
+        try:
+            if 'file' not in request.files:
+                return render_template('upload.html', error='No se seleccionó ningún archivo')
             
-            # Process the image
-            has_jaguar, result_image = detect_jaguar(filepath, request)
-            print(has_jaguar, result_image)
-            print(url_for('jaguar_detected'))
-            print(url_for('no_jaguar_found'))
-            session["result"] = result_image
+            file = request.files['file']
+            if file.filename == '':
+                return render_template('upload.html', error='No se seleccionó ningún archivo')
             
-            if has_jaguar:
-                return redirect(url_for('jaguar_detected', result=result_image))
+            if file and allowed_file(file.filename):
+                try:
+                    # Save the uploaded file
+                    filename = secure_filename(file.filename)
+                    filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                    file.save(filepath)
+                    
+                    # Get file size in KB
+                    file_size = os.path.getsize(filepath) / 1024  # Convert to KB
+                    
+                    # Store file info in session
+                    session['uploaded_file'] = {
+                        'name': filename,
+                        'size': f"{file_size:.0f}",
+                        'path': filepath,
+                        'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                    }
+                    
+                    return redirect(url_for('uploaded'))
+                except Exception as e:
+                    print(f"Error processing image: {str(e)}")
+                    if os.path.exists(filepath):
+                        os.remove(filepath)
+                    return render_template('upload.html', error='Error al procesar la imagen')
             else:
-                return redirect(url_for('no_jaguar_found'))
-        return render_template('upload.html')
-  # Esta ruta es del demo
+                return render_template('upload.html', error='Tipo de archivo no permitido')
+        except Exception as e:
+            print(f"Upload error: {str(e)}")
+            return render_template('upload.html', error='Error al subir el archivo')
+            
+    return render_template('upload.html')
+
+@app.route('/uploaded')
+def uploaded():
+    if 'uploaded_file' not in session:
+        return redirect(url_for('upload'))
+        
+    file_info = session['uploaded_file']
+    time_uploaded = datetime.strptime(file_info['timestamp'], '%Y-%m-%d %H:%M:%S')
+    now = datetime.now()
+    time_diff = now - time_uploaded
+    
+    # Calculate time difference in minutes
+    minutes = int(time_diff.total_seconds() / 60)
+    
+    return render_template('uploaded.html', 
+                         filename=file_info['name'],
+                         filesize=file_info['size'],
+                         minutes_ago=minutes)
+
+@app.route('/analyze')
+def analyze():
+    if 'uploaded_file' not in session:
+        return redirect(url_for('upload'))
+    # Aquí irá la lógica de análisis
+    return "Análisis en proceso..."
+
+# Esta ruta es del demo
 @app.route('/jaguar-detected')
 def jaguar_detected():
     result = session['result'] 
@@ -172,9 +220,4 @@ def waitlist():
 
 
 if __name__ == '__main__':
-    # Create necessary folders if they don't exist
-    os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-    os.makedirs(DETECTION_RESULTS, exist_ok=True)
-    app.secret_key = 'super secret key'
-    app.config['SESSION_TYPE'] = 'filesystem'
     app.run(debug=True, host='0.0.0.0', port=5000)

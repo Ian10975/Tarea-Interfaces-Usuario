@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Name your immersion - BioScanner</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: white;
+            margin: 0;
+            min-height: 100vh;
+            font-family: 'Hanken Grotesk', sans-serif;
+        }
+
+        .scan-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .scan-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .logo-container img {
+            height: 40px;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .profile-pic {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+        }
+
+        .scan-divider {
+            border-bottom: 1px solid #E0E0E0;
+            margin: 20px 0;
+        }
+
+        .page-title {
+            margin-bottom: 8px;
+            font-size: 24px;
+            font-weight: 600;
+            color: #1A1A1A;
+        }
+
+        .page-description {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+
+        .progress-dots {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #E0E0E0;
+        }
+
+        .dot.active {
+            background: #9FE870;
+        }
+
+        .help-link {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: #666;
+            font-size: 14px;
+            text-decoration: none;
+            margin-bottom: 24px;
+        }
+
+        .edit-icon {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        .corner-upload {
+            position: absolute;
+            top: -12px;
+            right: 12px;
+            background: white;
+            padding: 8px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            z-index: 2;
+        }
+
+        .corner-upload-icon {
+            width: 24px;
+            height: 24px;
+            display: block;
+        }
+
+        .success-container {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            overflow: visible;
+            position: relative;
+            margin-bottom: 40px;
+        }
+
+        .preview-image {
+            width: 100%;
+            display: block;
+        }
+
+        .success-content {
+            padding: 24px;
+        }
+
+        .success-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+
+        .success-title {
+            color: #004D40;
+            font-size: 20px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .upload-details {
+            color: #666;
+            font-size: 14px;
+            margin: 0 0 24px 0;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 16px;
+            border: 1px solid #E0E0E0;
+            border-radius: 12px;
+            font-size: 16px;
+            color: #333;
+            background: #FAFAFA;
+        }
+
+        .analyze-button {
+            display: inline-flex;
+            align-items: center;
+            background-color: #004D40;
+            color: white;
+            padding: 16px 24px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .analyze-button::after {
+            content: '→';
+            margin-left: 8px;
+        }
+
+        .delete-button {
+            background: none;
+            border: none;
+            padding: 8px;
+            cursor: pointer;
+        }
+
+        .delete-button img {
+            width: 20px;
+            height: 20px;
+            opacity: 0.6;
+        }
+
+        .nav-tabs {
+            background: white;
+            border-radius: 100px;
+            padding: 8px;
+            display: flex;
+            justify-content: space-around;
+            margin: 20px auto;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+        }
+
+        .tab-button {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 24px;
+            border: none;
+            background: none;
+            color: #666;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 100px;
+        }
+
+        .tab-button.active {
+            background: #004D40;
+            color: white;
+        }
+
+        .tab-icon {
+            width: 20px;
+            height: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="scan-container">
+        <header class="scan-header">
+            <div class="logo-container">
+                <a href="/">
+                    <img src="{{ url_for('static', filename='images/Logo Vertical BioScanner Scan.png') }}" alt="BioScanner">
+                </a>
+            </div>
+            <div class="user-profile">
+               
+                <span class="dropdown-arrow">▼</span>
+            </div>
+        </header>
+
+        <div class="scan-divider"></div>
+
+        <main>
+            <h1 class="page-title">Name your immersion</h1>
+            <p class="page-description">It's time for you to name and give some information about your immersion</p>
+
+            <div class="progress-dots">
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot active"></span>
+            </div>
+
+            <div class="help-button">
+                <button type="button" class="btn-help">
+                    <span class="help-icon">?</span> Help
+                </button>
+            </div>
+
+            <div class="success-container">
+                <div class="corner-upload">
+                    <img src="{{ url_for('static', filename='images/edit.png') }}" alt="Edit" class="corner-upload-icon">
+                </div>
+                <img src="{{ url_for('static', filename='images/image 2.png') }}" alt="Preview" class="preview-image">
+                
+                <div class="success-content">
+                    <div class="success-header">
+                        <h2 class="success-title">Successfully uploaded!</h2>
+                        <button class="delete-button">
+                            <img src="{{ url_for('static', filename='images/trash-delete.png') }}" alt="Delete">
+                        </button>
+                    </div>
+                    <p class="upload-details">500 fotos - 40 GB · Subidas hace 5 min</p>
+
+                    <form id="immersionForm" action="{{ url_for('analyze') }}" method="post">
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="expedition_name" value="Expedición de Campo" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="expedition_date" value="20/06/2025" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="expedition_location" value="Dzilam de Bravo, Yucatán, México" required>
+                        </div>
+                        
+                        <button type="submit" class="analyze-button">
+                            Analyze now
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <div class="nav-tabs">
+                <button class="tab-button active">
+                    <img src="{{ url_for('static', filename='images/scan.png') }}" alt="Scan" class="tab-icon">
+                    Scan
+                </button>
+                <button class="tab-button">
+                    <img src="{{ url_for('static', filename='images/grid-even.png') }}" alt="Gallery" class="tab-icon">
+                    Gallery
+                </button>
+                <button class="tab-button">
+                    <img src="{{ url_for('static', filename='images/Colum_up.png') }}" alt="Analytics" class="tab-icon">
+                    Analytics
+                </button>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>
+
+
+
+
+
