@@ -166,6 +166,11 @@ def scan():
     return render_template('scan.html')
 
 
+@app.route('/request-access')
+def waitlist():
+    return render_template('request_access.html')
+
+
 if __name__ == '__main__':
     # Create necessary folders if they don't exist
     os.makedirs(UPLOAD_FOLDER, exist_ok=True)
