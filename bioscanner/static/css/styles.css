@@ -1,0 +1,70 @@
+/* Estilos para la barra lateral en móvil */
+@media (max-width: 768px) {
+    #sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: 250px;
+        z-index: 50;
+        transform: translateX(-100%);
+    }
+
+    #sidebar.active {
+        transform: translateX(0);
+    }
+
+    /* Overlay para cuando la barra lateral está abierta */
+    .sidebar-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 40;
+    }
+
+    .sidebar-overlay.active {
+        display: block;
+    }
+}
+
+/* Animaciones suaves */
+.transition-transform {
+    transition-property: transform;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 300ms;
+}
+
+/* Estilos para las tarjetas de usuario */
+.user-card {
+    transition: transform 0.2s ease-in-out;
+}
+
+.user-card:hover {
+    transform: translateY(-5px);
+}
+
+/* Mejoras de accesibilidad */
+:focus-visible {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+}
+
+/* Estilos para el modo oscuro */
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #1a1a1a;
+        color: #ffffff;
+    }
+
+    .bg-white {
+        background-color: #2d2d2d;
+    }
+
+    .text-gray-700 {
+        color: #e5e5e5;
+    }
+} 

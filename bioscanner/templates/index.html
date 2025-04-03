@@ -1,122 +1,317 @@
-<!-- templates/index.html -->
-{% extends "base.html" %}
-
-{% block title %}Bioscanner - The Jaguar AI{% endblock %}
-
-{% block content %}
-
-<!-- Primera sección -->
-<section class="hero">
-    <div class="hero-container">
-        <div class="hero-content">
-        </div>
-    </div>
-    <div class="jaguar-section">
-        <img src="{{ url_for('static', filename='images/JAGUAR 1.png') }}" alt="Jaguar" class="jaguar-hero-image">
-    </div>
-</section>
-<!-- Segunda sección -->
-<section class="info-section">
-    <div class="info-container">
-        <p class="info-text">This project is all about using AI for good - monitoring, understanding, and safeguarding biodiversity like never before.</p>
-        <a href="/dashboard" class="dashboard-btn">Go to Dashboard</a>
-<!-- Tercera sección -->
-        <div class="partners-section">
-            <div class="divider-line"></div>
-            <div class="partners-wrapper">
-                <img src="{{ url_for('static', filename='images/Frame 17.png') }}" alt="Partner Logos" class="partners-image">
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Control </title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-gray-100">
+    <!-- Estructura principal usando CSS Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-[250px_1fr] min-h-screen">
+        <!-- Barra lateral -->
+        <aside id="sidebar" 
+               class="bg-white shadow-lg p-4 transition-transform duration-300 transform md:translate-x-0 fixed md:relative w-64 h-full z-50"
+               role="navigation" 
+               aria-label="Menú principal"
+               aria-expanded="false">
+            <div class="flex items-center justify-between mb-8">
+                <h2 class="text-xl font-bold text-gray-800"></h2>
+                <button id="closeSidebar" 
+                        class="md:hidden text-gray-500 hover:text-gray-700"
+                        aria-label="Cerrar menú">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
-            <div class="divider-line"></div>
-        </div>
-    </div>
-</section>
-<!-- Cuarta sección -->
-<section class="protect-section">
-    <div class="protect-container">
-        <h2 class="protect-title">Artificial Intelligence<br>to Protect the Jaguar</h2>
-        <p class="protect-text">Tech4Nature Mexico works to accelerate the effective conservation 
-            and regeneration of biodiversity and ecosystem health, strengthening monitoring, 
-            conservation, and understanding of the impacts of climate change on ecosystems 
-            and priority species in the mangrove area of the Yucátan Peninsula.</p>
-<!-- Quinta sección -->
-        <div class="vertical-bars">
-            <div class="bar"></div>
-            <div class="bar"></div>
-            <div class="bar"></div>
-            <div class="bar"></div>
-        </div>
-    </div>
-</section>
-<!-- Sexta sección -->
-<section class="tech4nature-section">
-    <div class="tech4nature-container">
-        <p class="tech4nature-text">
-            Tech4Nature Mexico works to accelerate the effective conservation and regeneration of biodiversity and ecosystem health, strengthening monitoring, conservation, and understanding of the impacts of climate change on ecosystems and priority species in the mangrove area of the Yucatán Peninsula.
-        </p>
-    </div>
-</section>
-<!-- Septima sección -->
-<footer class="footer-section">
-    <div class="footer-container">
-        <div class="footer-left">
-            <div class="contact-link">
-                CONTACT US <span class="arrow">→</span>
-            </div>
-            
-            <div class="footer-nav">
-                <div class="nav-column">
-                    <h3>HOME</h3>
-                    <h3>ABOUT</h3>
-                    <h3>COMMUNITY</h3>
-                    <ul>
-                        <li>Creators</li>
-                        <li>Events</li>
-                        <li>Opportunities</li>
-                    </ul>
+            <nav class="space-y-2" role="menu">
+                <a href="{% url 'home' %}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg" role="menuitem">
+                    <i class="fas fa-home mr-2"></i>Home
+                </a>
+                <a href="#" 
+                   class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg" 
+                   role="menuitem"
+                   onclick="toggleDeleteMode()"
+                   id="configButton">
+                    <i class="fas fa-cog mr-2"></i>Configuración
+                </a>
+                <form action="{% url 'logout' %}" method="post" class="inline">
+                    {% csrf_token %}
+                    <button type="submit" class="block w-full text-left px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg" role="menuitem">
+                        <i class="fas fa-sign-out-alt mr-2"></i>Cerrar Sesión
+                    </button>
+                </form>
+            </nav>
+        </aside>
+
+        <!-- Contenido principal -->
+        <main class="p-6">
+            <!-- Encabezado -->
+            <header class="flex justify-between items-center mb-8">
+                <div class="flex items-center">
+                    <button id="toggleSidebar" 
+                            class="md:hidden mr-4 text-gray-500 hover:text-gray-700"
+                            aria-label="Abrir menú">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h1 class="text-2xl font-bold text-gray-800">Panel de Control</h1>
                 </div>
-                
-                <div class="nav-column">
-                    <h3>KNOWLEDGE</h3>
-                    <ul>
-                        <li>Explore</li>
-                        <li>Reduce Del Saber</li>
-                    </ul>
-                    <h3>DISCOVERY</h3>
-                    <ul>
-                        <li>Featured First</li>
-                        <li>Prize 2024</li>
-                        <li>Learning Territories</li>
-                        <li>Bioconnectors</li>
-                    </ul>
+                <div class="flex items-center space-x-4">
+                    <button id="userButton" 
+                            class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                            aria-label="Menú de usuario">
+                        <i class="fas fa-user-circle mr-2"></i>
+                        {{ user.username }}
+                    </button>
                 </div>
-            </div>
-        </div>
+            </header>
 
-        <div class="footer-right">
-            <div class="newsletter-container">
-                <div class="newsletter-content">
-                    <h3>Subscribe Our Newsletter</h3>
-                    <div class="newsletter-form">
-                        <label>Email</label>
-                        <div class="input-wrapper">
-                            <input type="email">
-                            <button type="submit">→</button>
+            <!-- Tarjetas de información -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="userCards">
+                <!-- Las tarjetas se cargarán cuando se agreguen usuarios -->
+            </div>
+
+            <!-- Botón flotante para agregar usuario -->
+            <button id="addUserButton" 
+                    class="fixed bottom-6 right-6 bg-blue-500 text-white w-14 h-14 rounded-full shadow-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 flex items-center justify-center text-2xl"
+                    aria-label="Agregar usuario">
+                <i class="fas fa-plus"></i>
+            </button>
+
+            <!-- Modal para agregar usuario -->
+            <div id="addUserModal" 
+                 class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50"
+                 role="dialog"
+                 aria-labelledby="modalTitle">
+                <div class="bg-white rounded-lg p-8 max-w-md w-full mx-4">
+                    <h2 id="modalTitle" class="text-2xl font-bold mb-6">Agregar Usuario</h2>
+                    <form id="addUserForm" class="space-y-4">
+                        <div>
+                            <label for="userName" class="block text-gray-700 mb-2">Nombre</label>
+                            <input type="text" 
+                                   id="userName" 
+                                   class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                                   required>
                         </div>
+                        <div>
+                            <label for="userRole" class="block text-gray-700 mb-2">Rol</label>
+                            <select id="userRole" 
+                                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                                    required>
+                                <option value="">Seleccionar rol</option>
+                                <option value="Administrador">Administrador</option>
+                                <option value="Editor">Editor</option>
+                                <option value="Usuario">Usuario</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="userEmail" class="block text-gray-700 mb-2">Email</label>
+                            <input type="email" 
+                                   id="userEmail" 
+                                   class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                                   required>
+                        </div>
+                        <div class="flex justify-end space-x-4 mt-6">
+                            <button type="button" 
+                                    id="cancelButton"
+                                    class="px-4 py-2 text-gray-600 hover:text-gray-800">
+                                Cancelar
+                            </button>
+                            <button type="submit" 
+                                    class="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                                Guardar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Pie de página -->
+    <footer class="bg-white shadow-lg mt-8 p-4 text-center text-gray-600">
+        <p>&copy; 2025 Ian Iker Del Valle Zarate-Gerardo Giovanni Marrufo Palomino. Todos los derechos reservados.</p>
+    </footer>
+
+    <!-- Overlay para móvil -->
+    <div id="sidebarOverlay" 
+         class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"
+         role="presentation"
+         aria-hidden="true"></div>
+
+    <!-- Scripts -->
+    <script>
+        // Inicializar array vacío para los usuarios
+        const userData = [];
+        
+        // Referencias a elementos del DOM
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+        const toggleButton = document.getElementById('toggleSidebar');
+        const closeButton = document.getElementById('closeSidebar');
+        const userCardsContainer = document.getElementById('userCards');
+        const addUserButton = document.getElementById('addUserButton');
+        const addUserModal = document.getElementById('addUserModal');
+        const addUserForm = document.getElementById('addUserForm');
+        const cancelButton = document.getElementById('cancelButton');
+
+        // Funcionalidad de la barra lateral
+        function toggleSidebar() {
+            const isOpen = sidebar.classList.contains('translate-x-0');
+            sidebar.classList.toggle('translate-x-0');
+            sidebarOverlay.classList.toggle('hidden');
+            sidebar.setAttribute('aria-expanded', !isOpen);
+        }
+
+        toggleButton.addEventListener('click', toggleSidebar);
+        closeButton.addEventListener('click', toggleSidebar);
+        sidebarOverlay.addEventListener('click', toggleSidebar);
+
+        // Cerrar con la tecla Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && sidebar.classList.contains('translate-x-0')) {
+                toggleSidebar();
+            }
+        });
+
+        // Manejo de navegación por teclado
+        const menuItems = sidebar.querySelectorAll('a');
+        menuItems.forEach((item, index) => {
+            item.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowDown' && index < menuItems.length - 1) {
+                    e.preventDefault();
+                    menuItems[index + 1].focus();
+                }
+                if (e.key === 'ArrowUp' && index > 0) {
+                    e.preventDefault();
+                    menuItems[index - 1].focus();
+                }
+            });
+        });
+
+        // Modal y formulario de usuario
+        function closeModal() {
+            addUserModal.classList.add('hidden');
+            addUserForm.reset();
+        }
+
+        addUserButton.addEventListener('click', () => {
+            addUserModal.classList.remove('hidden');
+            document.getElementById('userName').focus();
+        });
+
+        cancelButton.addEventListener('click', closeModal);
+        addUserModal.addEventListener('click', (e) => {
+            if (e.target === addUserModal) {
+                closeModal();
+            }
+        });
+
+        let deleteMode = false;
+
+        function toggleDeleteMode() {
+            deleteMode = !deleteMode;
+            const configButton = document.getElementById('configButton');
+            const cards = document.querySelectorAll('.user-card');
+            
+            if (deleteMode) {
+                configButton.classList.add('bg-red-100');
+                showNotification('Modo eliminación activado: Click en una tarjeta para eliminarla', 'success');
+                
+                // Agregar indicador visual de modo eliminación a las tarjetas
+                cards.forEach(card => {
+                    card.classList.add('hover:bg-red-50', 'cursor-pointer');
+                    card.innerHTML += `
+                        <div class="absolute top-2 right-2 text-red-500">
+                            <i class="fas fa-trash"></i>
+                        </div>
+                    `;
+                });
+            } else {
+                configButton.classList.remove('bg-red-100');
+                showNotification('Modo eliminación desactivado', 'success');
+                
+                // Remover indicador visual
+                cards.forEach(card => {
+                    card.classList.remove('hover:bg-red-50', 'cursor-pointer');
+                    const deleteIcon = card.querySelector('.fa-trash').parentElement;
+                    deleteIcon.remove();
+                });
+            }
+        }
+
+        // Modificar la función de crear tarjeta para incluir la funcionalidad de eliminación
+        function createUserCard(user) {
+            const card = document.createElement('div');
+            card.className = 'user-card bg-white rounded-lg shadow-md p-6 transition-transform duration-200 hover:-translate-y-1 relative';
+            card.innerHTML = `
+                <div class="flex items-center space-x-4">
+                    <img src="${user.avatar}" 
+                         alt="${user.name}" 
+                         class="w-12 h-12 rounded-full"
+                         role="img">
+                    <div>
+                        <h3 class="text-lg font-semibold">${user.name}</h3>
+                        <p class="text-gray-600">${user.role}</p>
                     </div>
                 </div>
-            </div>
+                <p class="mt-4 text-gray-600">${user.email}</p>
+            `;
+
+            // Agregar evento de clic para eliminar
+            card.addEventListener('click', function() {
+                if (deleteMode) {
+                    if (confirm(`¿Estás seguro de que deseas eliminar a ${user.name}?`)) {
+                        // Encontrar el índice del usuario en el array
+                        const index = userData.findIndex(u => u.id === user.id);
+                        if (index > -1) {
+                            userData.splice(index, 1);
+                        }
+                        // Eliminar la tarjeta con animación
+                        card.style.opacity = '0';
+                        setTimeout(() => {
+                            card.remove();
+                            showNotification('Usuario eliminado exitosamente', 'success');
+                        }, 300);
+                    }
+                }
+            });
+
+            return card;
+        }
+
+        // Modificar el manejador del formulario para usar la nueva función createUserCard
+        addUserForm.addEventListener('submit', (e) => {
+            e.preventDefault();
             
-            <div class="social-links">
-            </div>
-        </div>
-    </div>
-    
-    <div class="footer-bottom">
-        <div class="copyright-line"></div>
-        <div class="copyright-content">
-            <p class="copyright-text">© Naturalab LAC. All Rights Reserved. 2024</p>
-            <img src="{{ url_for('static', filename='images/Group 4.png') }}" alt="Social Media Icons">
-        </div>
-    </div>
-</footer>
-{% endblock %}
+            const newUser = {
+                id: Date.now(), // Usar timestamp como ID único
+                name: document.getElementById('userName').value,
+                role: document.getElementById('userRole').value,
+                email: document.getElementById('userEmail').value,
+                avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(document.getElementById('userName').value)}`
+            };
+
+            userData.push(newUser);
+            userCardsContainer.appendChild(createUserCard(newUser));
+            showNotification('Usuario agregado exitosamente', 'success');
+            closeModal();
+        });
+
+        // Función para mostrar notificaciones
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 p-4 rounded-lg shadow-lg ${
+                type === 'success' ? 'bg-green-500' : 'bg-red-500'
+            } text-white transition-opacity duration-300`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
