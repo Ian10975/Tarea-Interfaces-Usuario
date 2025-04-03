@@ -119,9 +119,8 @@ El proyecto utiliza las siguientes configuraciones clave en `settings.py`:
 5. Crear Pull Request
 
 ## Autor
-[Tu Nombre]
+Ian Iker Del Valle Zarate
+Gerardo Giovanni Marrufo Palomino
 
-## Licencia
-Este proyecto está bajo la Licencia MIT.
 
 ## Estructura del Proyecto 
